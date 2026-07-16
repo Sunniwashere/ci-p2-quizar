@@ -12,8 +12,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const answerButtons = document.querySelectorAll(".answer-btn");
     const submitButton = document.getElementById("submit");
     const imageSupport = document.getElementById("correct-img");
+    const popup = document.getElementById("‎correction-notificationpopup");
+    const popupText = document.getElementById("‎correction-note");
 
-
+    popup.style.display = "none";
+    popupText.style.display = "none";
+    
     let selectedAnswer = "";
     let score = 0;
     let currentQuestionIndex = 0;
@@ -143,8 +147,11 @@ document.addEventListener("DOMContentLoaded", function () {
             ++score;
         }
         else {
-            document.getElementById("is-correct").innerText = (`Incorrect, the question was ${quiz[currentQuestionIndex].question} and the answer is ${quiz[currentQuestionIndex].answer}`);
-            imageSupport.style.display = "inline-block";
+            showPopUp();
+            document.getElementById("correction-note").innerText = (`Incorrect, the question was ${quiz[currentQuestionIndex].question} and the answer is ${quiz[currentQuestionIndex].answer}`);
+            // document.getElementById("is-correct").innerText = (`Incorrect, the question was ${quiz[currentQuestionIndex].question} and the answer is ${quiz[currentQuestionIndex].answer}`);
+            // imageSupport.style.display = "inline-block";
+            
         }
 
         document.getElementById("score-text").innerText = `Score: ${score}`;
@@ -152,6 +159,14 @@ document.addEventListener("DOMContentLoaded", function () {
         nextQuestion();
     }
 
+    /** */
+    function showPopUp() {
+        
+            popup.style.display = "flex";
+            popupText.style.display = "";
+            
+            
+    }
     /**Function to move to the next question
      */
     function nextQuestion() {
