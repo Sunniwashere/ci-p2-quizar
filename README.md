@@ -4,7 +4,7 @@
 - The QuizAR has been designed so that users at any level, who can read, write, and understand text (mainly in English), and have a drive to learn about AI, can answer the questions.
 - QuizAR is especially handy for those wish to be quizzed on about AI and its history and state of the arts.
 - QuizAR helps one reinforce their fundamental AI knowledge as they answer the questions provided on QuizAR .
-- QuizAR is the AI quiz website for everyone. This quiz site for just for answering question about AI and it is free.
+- QuizAR is the AI quiz website for everyone. This quiz site for just for answering question about AI and it is free & easy to understand
 - QuizAR also contains questions on Machine Learning based knowledge.
 
 ## Table of Contents
