@@ -162,7 +162,7 @@ document.addEventListener("DOMContentLoaded", function () {
     /** */
     function showPopUp() {
         
-            popup.style.display = "";
+            popup.style.display = "flex";
             popupText.style.display = "";
             
             
