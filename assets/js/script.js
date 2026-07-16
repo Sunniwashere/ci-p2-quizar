@@ -1,9 +1,6 @@
 /**
  * Wait for the DOM to finish loading
  */
-
-//Tip from Love Maths Lesson
-
 document.addEventListener("DOMContentLoaded", function () {
 
     const startQuizButton = document.getElementById("start-quiz");
@@ -12,27 +9,28 @@ document.addEventListener("DOMContentLoaded", function () {
     const answerButtons = document.querySelectorAll(".answer-btn");
     const submitButton = document.getElementById("submit");
     const imageSupport = document.getElementById("correct-img");
-    const popup = document.getElementById("‎correction-notificationpopup");
-    const popupText = document.getElementById("‎correction-note");
-
-    popup.style.display = "none";
-    popupText.style.display = "none";
     
-    let selectedAnswer = "";
+    // Fixed: Invisible characters removed from IDs
+    const popup = document.getElementById("correction-notificationpopup");
+    const popupText = document.getElementById("correction-note");
+    // Added: Reference to a close button inside your popup
+    const closePopupBtn = document.getElementById("close-popup");
+
+    // Hide popup elements initially
+    if (popup) popup.style.display = "none";
+    
     let score = 0;
     let currentQuestionIndex = 0;
 
     const quiz = [
         {
             question: "What is AI?",
-            options: ["Alien Intelligence", "Artificial Intelligence",
-                "Alien Initiative", "Artificial Interferences"],
+            options: ["Alien Intelligence", "Artificial Intelligence", "Alien Initiative", "Artificial Interferences"],
             answer: "Artificial Intelligence"
         },
         {
             question: "What is ANNs?",
-            options: ["Artifiical Nation of Networks", "Ants Nomads are Natural",
-                "Artificial Neural Networks", "Analytical Neural Networks"],
+            options: ["Artifiical Nation of Networks", "Ants Nomads are Natural", "Artificial Neural Networks", "Analytical Neural Networks"],
             answer: "Artificial Neural Networks"
         },
         {
@@ -47,20 +45,17 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         {
             question: "Which does not belong to the group?",
-            options: ["Supervised learning", "network learning",
-                "reinforcement learning", "semi-supervised learning"],
+            options: ["Supervised learning", "network learning", "reinforcement learning", "semi-supervised learning"],
             answer: "network learning"
         },
         {
             question: "What is the process of discovering patterns and knowledge from large amounts of data",
-            options: ["Machine learning", "Data mining",
-                "Artificial Intelligence", "Artificial Interferences"],
+            options: ["Machine learning", "Data mining", "Artificial Intelligence", "Artificial Interferences"],
             answer: "Data mining"
         },
         {
             question: "What is ML?",
-            options: ["Alien Intelligence", "Machine Learning",
-                "Monster Learning", "Mechanical Levitation"],
+            options: ["Alien Intelligence", "Machine Learning", "Monster Learning", "Mechanical Levitation"],
             answer: "Machine Learning"
         },
         {
@@ -80,62 +75,47 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     ];
 
-
     instructionSect.style.display = "block";
-
-
     quizContainer.style.display = "none";
-    imageSupport.style.display = "none";
+    if (imageSupport) imageSupport.style.display = "none";
 
     startQuizButton.addEventListener("click", function () {
-
         instructionSect.style.display = "none";
-
         quizContainer.style.display = "block";
-
         displayQuestionAndAnswers(currentQuestionIndex);
     });
 
-    // add click event to each answer button : ChatGPT AIDED CODE
+    // Handle answer selection
     answerButtons.forEach(button => {
         button.addEventListener("click", function () {
-
             answerButtons.forEach(btn => btn.classList.remove("active"));
-
             this.classList.add("active");
-
-            selectedAnswer = this.textContent;
         });
-
     });
 
-    //Tip from the Love Maths Lesson
-
+    // Enter key submits answer
     document.addEventListener("keydown", function (event) {
         if (event.key === "Enter") {
-            checkAnswer();
+            // Only submit if quiz is visible and popup is hidden
+            if (quizContainer.style.display === "block" && popup.style.display === "none") {
+                checkAnswer();
+            }
         }
     });
 
-    /** Function to display the current question and its answers
-     *  */
+    /** Function to display the current question and its answers */
     function displayQuestionAndAnswers(index) {
-
         document.getElementById("question").innerText = quiz[index].question;
-
-
         quiz[index].options.forEach((option, i) => {
             answerButtons[i].innerHTML = option;
             answerButtons[i].classList.remove("active");
         });
     }
 
-    /** Function to check the user's answer
-     */
+    /** Function to check the user's answer */
     function checkAnswer() {
         const selectedOption = document.querySelector(".answer-btn.active");
 
-        // Check if an answer was selected
         if (!selectedOption) {
             alert("Please select an answer!");
             return;
@@ -144,35 +124,33 @@ document.addEventListener("DOMContentLoaded", function () {
         let selectedAnswer = selectedOption.innerHTML;
 
         if (selectedAnswer === quiz[currentQuestionIndex].answer) {
-            ++score;
+            score++;
+            document.getElementById("score-text").innerText = `Score: ${score}`;
+            nextQuestion();
+        } else {
+            // Show popup and freeze progression until closed
+            showPopUp(`Incorrect! The question was: "${quiz[currentQuestionIndex].question}" and the correct answer is: "${quiz[currentQuestionIndex].answer}"`);
         }
-        else {
-            showPopUp();
-            document.getElementById("correction-note").innerText = (`Incorrect, the question was ${quiz[currentQuestionIndex].question} and the answer is ${quiz[currentQuestionIndex].answer}`);
-            // document.getElementById("is-correct").innerText = (`Incorrect, the question was ${quiz[currentQuestionIndex].question} and the answer is ${quiz[currentQuestionIndex].answer}`);
-            // imageSupport.style.display = "inline-block";
-            
-        }
-
-        document.getElementById("score-text").innerText = `Score: ${score}`;
-
-        nextQuestion();
     }
 
-    /** */
-    function showPopUp() {
-        
-            popup.style.display = "flex";
-            popupText.style.display = "";
-            
-            
+    /** Display the Popup */
+    function showPopUp(text) {
+        popupText.innerText = text;
+        popup.style.display = "flex";
     }
-    /**Function to move to the next question
-     */
+
+    /** Close Popup and advance game */
+    if (closePopupBtn) {
+        closePopupBtn.addEventListener("click", function() {
+            popup.style.display = "none";
+            document.getElementById("score-text").innerText = `Score: ${score}`;
+            nextQuestion();
+        });
+    }
+
+    /** Function to move to the next question */
     function nextQuestion() {
-
         currentQuestionIndex++;
-
         if (currentQuestionIndex < quiz.length) {
             displayQuestionAndAnswers(currentQuestionIndex);
         } else {
@@ -180,19 +158,13 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    /**Function to display the results after the quiz ends
-     */
+    /** Function to display the results after the quiz ends */
     function displayResults() {
-
         quizContainer.style.display = "none";
-
         const resultSection = document.getElementById("result-section");
         resultSection.style.display = "flex";
-
         document.getElementById("analytics").innerText = `Your final score is ${score} out of ${quiz.length}`;
     }
 
-
     submitButton.addEventListener("click", checkAnswer);
 });
-
